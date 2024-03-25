@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import Inner from "./Inner";
 
-const Counter = () => {
-  const [count, setCount] = useState(0);
+const Counter = ({ path = [], onAddChild, onDelete }) => {
   const [items, setItems] = useState([]);
 
   const handlePlus = () => {
-    setCount((prevCount) => prevCount + 1);
-    setItems((prevItems) => [...prevItems, count]);
+    setItems((prevItems) => [...prevItems, items.length]);
+  };
+
+  const handleDelete = (pathToDelete) => {
+    setItems((prevItems) =>
+      prevItems.filter((item, index) => !pathToDelete.includes(index))
+    );
+  };
+
+  const handleAddChild = (pathToAddChild) => {
+    setItems((prevItems) => [...prevItems, prevItems.length]);
   };
 
   return (
@@ -15,7 +23,13 @@ const Counter = () => {
       <button onClick={handlePlus}>+</button>
       <div>
         {items.map((item, index) => (
-          <Inner key={index} item={item} />
+          <Inner
+            key={index}
+            item={item}
+            path={[...path, index]}
+            onDelete={handleDelete}
+            onAddChild={handleAddChild}
+          />
         ))}
       </div>
     </div>
@@ -23,3 +37,5 @@ const Counter = () => {
 };
 
 export default Counter;
+
+
